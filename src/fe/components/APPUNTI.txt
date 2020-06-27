@@ -1,0 +1,121 @@
+REACT-ROUTER-DOM
+Per creare rotte in React Js e cambiare le pagine della nostra APP,
+installato react-router-dom
+
+npm install --save react-router-dom
+
+Elementi di react-router-dom:
+ROUTE:
+<Route path="/users" component={Users} />
+Elemento in cui si specifica il percorso URL e il componente da renderizzare.
+Quando il percorso nel browser matcha quello specificato nell'elemento Route, 
+allora viene richiamato il componente specificato {Users}.
+
+LINK:
+Usato per wrappare elementi e far si che quell'elemento ci porti al percorso richiesto:
+<Link to="/users">
+    <Menu.Item name="users">
+        <Icon name="users" />
+        Users
+    </Menu.Item>
+</Link>
+
+ROTTE CON PARAMETRI:
+<Route path="/users/:userId" component={UserInfo} />
+Il parametro si definisce nel componente padre con il simbolo : davanti al nome :userId
+Nel componente figlio chiamato (in questo caso UserInfo)
+Il parametro si estrae dalla props match (come props vengono sempre passati giù: history, match e location)
+e la props match si etrae dalle props passate giù.
+const { match { params }} = this.props; // o solo props per i componenti funzionali
+e si utilizza nel codice come params.userId
+axios.get(`/api/users/${params.userId}`)
+In un altro componente utilizziamo l'indice dell'utente definito nella tabella stessa (user.id):
+<Link to={`/users/${user.id}`}>
+    {user.name}
+</Link>
+Per creare un link tipo /users/indice il cui percorso matcha la Route creata all'inizio 
+e quindi ci porta comunque alle info dell'utente visualizzate da UserInfo anche se non stiamo usando il parametro.
+
+HISTORY:
+La props history viene passata come props a tutti i componenti che sono raggiunti attraverso Route.
+Per utilizzarla bisogna estrarla dalle props:
+const { history } = props;
+e poi usarla pushando sopra una nuota rotta:
+history.push('/users'); 
+oppure per tornare alla pagina precedente:
+history.goBack()
+
+CHILD ROUTES:
+Le Child Route sono rotte specificate dentro componenti richiamati da altre Route.
+In index.js abbiamo: <Route path="/users" component={Users} />
+In Users.js abbiamo: <Route path="/users/:userId" component={UserInfo} />
+Al matching nella barra browser di /users verrà visualizzato Users 
+e continuando il matching /users/2 verrà visualizzato UsersInfo subito dopo Users
+Entrambi matchano e vengono quindi visualizzati entrambi.
+
+SWITCH:
+Permette di scegliere tra diverse rotte in base a quella che matcha prima.
+Per questo l'ordine in cui sono scritte le rotte, conta e solitamente si scrivono 
+prima le rotte più specifiche e dopo le rotte più generiche:
+<Switch>
+    <Route path="/users/new" component={UserAdd} />
+    <Route path="/users" component={Users} />
+    <Route component={FourOhFour} />    <-Viene visualizzata tutte le volte, se non matcha prima qualcos'altro.
+</Switch>
+
+PROMPT:
+Visualizza un messaggio quando si cerca di effettuare un cambiamento sulla rotta corrente.
+Accetta una props "when" di tipo bool per controllare quando deve essere richiamato il prompt.
+Solitamente si usa when nei Form quando qualche campo è stato cambiato.
+<Prompt when={formChanged} message="Are you sure you wanna do that?" />
+
+ROUTE "RENDER" PROP:
+Possiamo affiancare ad una rotta esistente "/users" un'altra rotta simile che va a renderizzare un elemento JSX 
+a finaco al componente visualizzato precedentemente sempre nella stessa rotta "/users".
+Quando invece non saremo nella stessa rotta, quell'elemento non verrà visualizzato.
+<Route path="/users"  render={() => (
+    <Link to="/users/new">
+      <Menu.Item name="new-user">
+        <Icon name="plus" />
+        Add a User
+      </Menu.Item>
+    </Link>
+    )}
+/>
+In questo caso il + nel menù sidebar viene visualizzato solo se siamo in "/users"
+
+ROUTE "EXACT" PROP:
+Matcha esattamente un path specificato (Es. "/users"). 
+Così facendo esclude però gli altri path del tipo "/users/id".
+
+REDIRECT:
+E' un componente e quindi si usa nel metodo render() (per le classi) dopo il return 
+e si usa appunto per ridirezionare una rotta. Si usa per l'autenticazione.
+Se un utente cerca di entrare nel path /users ma non è autenticato verrà ridirezionato al path /login.
+Quindi nel componente principale avremo:
+if (!isLoggedIn()) { return <Redirect to="/login" />; }
+return ( Dashboard/Cms )
+Viceversa se l'utente è già loggato e va in Login verrà rediretto verso il componente principale e nel path /users
+Nel componente Login avremo:
+ render() {
+    if (isLoggedIn()) { return <Redirect to="/users" />; }
+    return ( Form del Login)
+
+STATICROUTER:
+Usato per Server Side Rendering
+
+LOCATION:
+E' una props passata giù verso i componenti presenti in Route assieme a History e Match e 
+indica in ogni momento dove ci troviamo nel path
+
+WITHROUTER:
+Componente di tipo HOC 
+const EnhancedComponent = HOComponent(WrappedComponent);
+che rende disponibile in qualsiasi componente wrappato le props tipo History, Location, Match senza passarle giù.
+
+
+
+
+
+
+
