@@ -19,6 +19,7 @@ Usato per wrappare elementi e far si che quell'elemento ci porti al percorso ric
         Users
     </Menu.Item>
 </Link>
+Ovviamente deve esistere già la Route richiamata in Link.
 
 ROTTE CON PARAMETRI:
 <Route path="/users/:userId" component={UserInfo} />
