@@ -72,7 +72,7 @@ Solitamente si usa when nei Form quando qualche campo è stato cambiato.
 
 ROUTE "RENDER" PROP:
 Possiamo affiancare ad una rotta esistente "/users" un'altra rotta simile che va a renderizzare un elemento JSX 
-a finaco al componente visualizzato precedentemente sempre nella stessa rotta "/users".
+a fianco al componente visualizzato precedentemente sempre nella stessa rotta "/users".
 Quando invece non saremo nella stessa rotta, quell'elemento non verrà visualizzato.
 <Route path="/users"  render={() => (
     <Link to="/users/new">
